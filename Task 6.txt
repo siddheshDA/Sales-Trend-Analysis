@@ -1,0 +1,69 @@
+--2) import .csv file 
+COPY online_sales_sample (order_date, order_id, amount, product_id)
+FROM 'F:/online_sales_sample.csv'
+DELIMITER ','
+CSV HEADER
+
+---1) created table
+create table online_sales_sample
+( order_date date,
+  order_id int primary key,
+  amount int,
+  product_id int
+  )
+  
+---3) run online_sales_sample table to see if it's imported properly or not
+select
+ *
+from
+ online_sales_sample
+
+
+
+
+
+
+--- EXTRACTED YEAR AND MONTH FROM ORDER_DATE 
+SELECT 
+    EXTRACT(YEAR FROM order_date) AS year,
+    EXTRACT(MONTH FROM order_date) AS month,
+    SUM(amount) AS monthly_revenue,
+    COUNT(DISTINCT order_id) AS order_volume
+FROM
+    online_sales_sample
+GROUP BY
+    1,2
+ORDER BY
+    1,2
+
+
+--- results for specific time periods, find out monthly revenue after month jun(6)
+SELECT 
+    EXTRACT(YEAR FROM order_date) AS year,
+    EXTRACT(MONTH FROM order_date) AS month,
+    SUM(amount) AS monthly_revenue,
+    COUNT(DISTINCT order_id) AS order_volume
+FROM
+    online_sales_sample
+WHERE
+    EXTRACT(MONTH FROM ORDER_DATE) > 6
+GROUP BY
+    1,2
+ORDER BY
+    1,2
+
+
+---  Top 3 Months by Revenue
+SELECT
+ EXTRACT(MONTH FROM ORDER_DATE) AS MONTH,
+ EXTRACT(YEAR FROM ORDER_DATE) AS YEAR,
+ SUM(AMOUNT) AS MONTHLY_REVENUE
+FROM
+ ONLINE_SALES_SAMPLE
+GROUP BY
+ 1,2
+ORDER BY
+ 3 DESC
+LIMIT 
+ 3
+
